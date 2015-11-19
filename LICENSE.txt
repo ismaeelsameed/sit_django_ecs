@@ -1,4 +1,4 @@
-Copyright (c) <2015> <Ismaeel Abu Sameed>
+Copyright (c) 2015 Ismaeel Abu Sameed
 
 
 
