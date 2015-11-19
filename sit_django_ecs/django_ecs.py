@@ -4,10 +4,10 @@ import boto3
 class Ecs(object):
     region = 'us-west-1'
     definition_name = None
-    container = 'edx-cypress'
+    container = None
     platform_name = None
     cluster = 'default'
-    image = 'appsembler/edx-lite'
+    image = None
     aws_access_key_id = None
     aws_secret_access_key = None
 
@@ -71,3 +71,50 @@ class Ecs(object):
                                                                              hostname, port)
         response['create_service'] = self.create_service(region, definition_name, cluster)
         return response
+
+    def delete_service(self, region, cluster, service_name):
+        client = boto3.client('ecs', region, aws_access_key_id=self.aws_access_key_id,
+                              aws_secret_access_key=self.aws_secret_access_key)
+        response = client.delete_service(
+            cluster=cluster,
+            service=service_name
+        )
+        return response
+
+    def delete_task_defention(self, task_definition, region):
+        client = boto3.client('ecs', region, aws_access_key_id=self.aws_access_key_id,
+                              aws_secret_access_key=self.aws_secret_access_key)
+        response = client.deregister_task_definition(
+            taskDefinition=task_definition
+        )
+        return response
+
+    def list_services(self, cluster, region):
+        client = boto3.client('ecs', region, aws_access_key_id=self.aws_access_key_id,
+                              aws_secret_access_key=self.aws_secret_access_key)
+        response = client.list_services(
+            cluster=cluster,
+            nextToken='string',
+            maxResults=100
+        )
+        return response
+
+    def list_task_definitions(self, family, region, status):
+        client = boto3.client('ecs', region, aws_access_key_id=self.aws_access_key_id,
+                              aws_secret_access_key=self.aws_secret_access_key)
+        response = client.list_task_definitions(
+            familyPrefix=family,
+            status=status
+        )
+        return response
+
+    # services is an array of services
+    def cluster_info(self, region, cluster, services):
+        client = boto3.client('ecs', region, aws_access_key_id=self.aws_access_key_id,
+                              aws_secret_access_key=self.aws_secret_access_key)
+        response = client.describe_services(
+            cluster=cluster,
+            services=services
+        )
+        return response
+
