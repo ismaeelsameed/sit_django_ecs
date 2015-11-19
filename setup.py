@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='sit_django_ecs',
     packages=['sit_django_ecs'],  # this must be the same as the name above
-    version='1.0.0',
+    version='1.0.3',
     description='A library to interact with amazon ecs containers from a django application',
     author='Ismaeel Abu Sameed, Zaid Farekh',
     author_email='i.abusameed@sit-mena.com',
