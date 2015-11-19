@@ -8,12 +8,16 @@ class Ecs(object):
     platform_name = None
     cluster = 'default'
     image = 'appsembler/edx-lite'
+    aws_access_key_id = None
+    aws_secret_access_key = None
 
-    def __init__(self):
-        pass
+    def __init__(self, aws_access_key_id=None, aws_secret_access_key=None):
+        self.aws_access_key_id = aws_access_key_id
+        self.aws_secret_access_key = aws_secret_access_key
 
     def register_task_definition(self, region, definition_name, container, hostname, port):
-        client = boto3.client('ecs', region)
+        client = boto3.client('ecs', region, aws_access_key_id=self.aws_access_key_id,
+                              aws_secret_access_key=self.aws_secret_access_key)
         response = client.register_task_definition(
             family=definition_name,
             containerDefinitions=[
@@ -50,7 +54,8 @@ class Ecs(object):
         return response
 
     def create_service(self, region, definition_name, cluster):
-        client = boto3.client('ecs', region)
+        client = boto3.client('ecs', region, aws_access_key_id=self.aws_access_key_id,
+                              aws_secret_access_key=self.aws_secret_access_key)
         response = client.create_service(
             cluster=cluster,
             serviceName=definition_name,
