@@ -30,19 +30,9 @@ class Ecs(object):
                     'portMappings': [
                         {
                             'containerPort': 80,
-                            'hostPort': 44500,
+                            'hostPort': 9293,
                             'protocol': 'tcp'
-                        },
-                        {
-                            'containerPort': 18010,
-                            'hostPort': 44300,
-                            'protocol': 'tcp'
-                        },
-                        {
-                            'containerPort': 18020,
-                            'hostPort': 44100,
-                            'protocol': 'tcp'
-                        },
+                        }
                     ],
                     'essential': True,
                     'entryPoint': [],
