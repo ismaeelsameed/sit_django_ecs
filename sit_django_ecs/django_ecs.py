@@ -7,7 +7,7 @@ class Ecs(object):
     container = None
     platform_name = None
     cluster = 'default'
-    image = None
+    image = 'abdoosh00/edx-new-release'
     aws_access_key_id = None
     aws_secret_access_key = None
 
@@ -30,7 +30,17 @@ class Ecs(object):
                     'portMappings': [
                         {
                             'containerPort': 80,
-                            'hostPort': port,
+                            'hostPort': 44500,
+                            'protocol': 'tcp'
+                        },
+                        {
+                            'containerPort': 18010,
+                            'hostPort': 44300,
+                            'protocol': 'tcp'
+                        },
+                        {
+                            'containerPort': 18020,
+                            'hostPort': 44100,
                             'protocol': 'tcp'
                         },
                     ],
