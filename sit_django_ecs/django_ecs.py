@@ -46,7 +46,7 @@ class Ecs(object):
                     ],
                     'essential': True,
                     'entryPoint': [],
-                    'command': [],
+                    'command': ['/etc/cnstartup.sh'],
                     'environment': [],
                     'mountPoints': [],
                     'volumesFrom': [],
