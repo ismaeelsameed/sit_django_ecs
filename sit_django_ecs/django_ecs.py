@@ -15,7 +15,7 @@ class Ecs(object):
         self.aws_access_key_id = aws_access_key_id
         self.aws_secret_access_key = aws_secret_access_key
 
-    def register_task_definition(self, region, definition_name, container, hostname, port, image):
+    def register_task_definition(self, region, definition_name, container, hostname, ports, image):
         client = boto3.client('ecs', region, aws_access_key_id=self.aws_access_key_id,
                               aws_secret_access_key=self.aws_secret_access_key)
         response = client.register_task_definition(
@@ -30,17 +30,17 @@ class Ecs(object):
                     'portMappings': [
                         {
                             'containerPort': 80,
-                            'hostPort': port,
+                            'hostPort': ports[0],
                             'protocol': 'tcp'
                         },
                         {
                             'containerPort': 18010,
-                            'hostPort': 44300,
+                            'hostPort': ports[1],
                             'protocol': 'tcp'
                         },
                         {
                             'containerPort': 18020,
-                            'hostPort': 44100,
+                            'hostPort': ports[2],
                             'protocol': 'tcp'
                         },
                     ],
