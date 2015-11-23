@@ -7,7 +7,7 @@ class Ecs(object):
     container = None
     platform_name = None
     cluster = 'default'
-    image = 'abdoosh00/edx-new-release'
+    image = None
     aws_access_key_id = None
     aws_secret_access_key = None
 
@@ -15,7 +15,7 @@ class Ecs(object):
         self.aws_access_key_id = aws_access_key_id
         self.aws_secret_access_key = aws_secret_access_key
 
-    def register_task_definition(self, region, definition_name, container, hostname, port):
+    def register_task_definition(self, region, definition_name, container, hostname, port, image):
         client = boto3.client('ecs', region, aws_access_key_id=self.aws_access_key_id,
                               aws_secret_access_key=self.aws_secret_access_key)
         response = client.register_task_definition(
@@ -23,16 +23,26 @@ class Ecs(object):
             containerDefinitions=[
                 {
                     'name': container,
-                    'image': self.image,
-                    'cpu': 512,
-                    'memory': 1024,
+                    'image': image,
+                    'cpu': 1024,
+                    'memory': 2048,
                     'links': [],
                     'portMappings': [
                         {
                             'containerPort': 80,
-                            'hostPort': 9293,
+                            'hostPort': port,
                             'protocol': 'tcp'
-                        }
+                        },
+                        {
+                            'containerPort': 18010,
+                            'hostPort': 44300,
+                            'protocol': 'tcp'
+                        },
+                        {
+                            'containerPort': 18020,
+                            'hostPort': 44100,
+                            'protocol': 'tcp'
+                        },
                     ],
                     'essential': True,
                     'entryPoint': [],
@@ -65,10 +75,10 @@ class Ecs(object):
         )
         return response
 
-    def run_service(self, region, definition_name, container, hostname, port, cluster):
+    def run_service(self, region, definition_name, container, hostname, port, cluster, image):
         response = {}
         response['register_task_definition'] = self.register_task_definition(region, definition_name, container,
-                                                                             hostname, port)
+                                                                             hostname, port, image)
         response['create_service'] = self.create_service(region, definition_name, cluster)
         return response
 
